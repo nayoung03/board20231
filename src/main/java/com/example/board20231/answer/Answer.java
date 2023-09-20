@@ -1,5 +1,6 @@
-package com.example.board20231.entity;
+package com.example.board20231.answer;
 
+import com.example.board20231.question.Question;
 import lombok.Getter;
 import lombok.Setter;
 
