@@ -1,0 +1,36 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  application.name: board2023
+  task:
+    execution:
+      pool:
+        core-size: 10
+        max-size: 20
+        allow-core-thread-timeout: false
+      thread-name-prefix: TNP-
+  thymeleaf:
+    cache: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/board2023db?serverTimezone=Asia/Seoul
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: never
+    sql-script-encoding: UTF-8
+  jpa:
+    generate-ddl: true
+    open-in-view: false
+
+    # If you use a logging framework like log4j,
+    # you should always set that property to false
+    # because it gives you no benefit at all.
+    # https://stackoverflow.com/a/22977693/1986241
+    show-sql: true
+
+    hibernate:
+      # ex) ddl-auto: none, create-drop, create, update, validate
+      ddl-auto: update
