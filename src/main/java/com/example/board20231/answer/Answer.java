@@ -3,6 +3,7 @@ package com.example.board20231.answer;
 import com.example.board20231.question.Question;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class Answer {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @CreatedDate
     private LocalDateTime createDate;
 
     @ManyToOne
