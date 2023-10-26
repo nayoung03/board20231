@@ -1,19 +1,18 @@
 package com.example.board20231.question;
 
 import com.example.board20231.DataNotFoundException;
+import com.example.board20231.user.SiteUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.config.ConfigDataNotFoundException;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.data.domain.Sort;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -34,11 +33,12 @@ public class QuestionService {
             throw new DataNotFoundException("question not found");
         }
     }
-    public void create(String subject, String content){
+    public void create(String subject, String content, SiteUser user){
         Question q = new Question();
         q.setSubject(subject);
         q.setContent(content);
         q.setCreateDate(LocalDateTime.now());
+        q.setAuthor(user);
         this.questionRepository.save(q);
     }
     /*

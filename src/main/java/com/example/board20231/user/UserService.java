@@ -1,8 +1,11 @@
 package com.example.board20231.user;
 
+import com.example.board20231.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,10 +24,15 @@ public class UserService {
         return user;
     }
 
-//    //TODO: 사용자 조회기능
-//    public SiteUser search(String username){
-//        SiteUser findname = new SiteUser();
-//        findname.getUsername();
-//        return findname;
-//    }
+    public SiteUser getUser(String username) {
+        Optional<SiteUser> siteUser = this.userRepository.findByusername(username);
+        if (siteUser.isPresent()) {
+            return siteUser.get();
+        } else {
+            throw new DataNotFoundException("siteuser not found");
+        }
+    }
+
+
+
 }

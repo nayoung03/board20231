@@ -1,6 +1,7 @@
 package com.example.board20231.question;
 
 import com.example.board20231.answer.Answer;
+import com.example.board20231.user.SiteUser;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,4 +28,7 @@ public class Question {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Answer> answerList;
+
+    @ManyToOne
+    private SiteUser author;
 }
