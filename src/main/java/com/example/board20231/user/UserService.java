@@ -20,4 +20,11 @@ public class UserService {
         this.userRepository.save(user);
         return user;
     }
+
+//    //TODO: 사용자 조회기능
+//    public SiteUser search(String username){
+//        SiteUser findname = new SiteUser();
+//        findname.getUsername();
+//        return findname;
+//    }
 }
