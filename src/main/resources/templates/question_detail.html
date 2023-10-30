@@ -1,5 +1,5 @@
 <!--<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">-->
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-secuirty">
 <div layout:fragment="content" class="container my-3">
     <!--질문-->
     <h2 class="border-bottom py-2" th:text="${question.subject}"></h2>
