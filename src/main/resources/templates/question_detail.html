@@ -11,8 +11,17 @@
                     <div th:text="${#temporals.format(question.createDate,'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
+            <div class="my-3">
+                <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+                   th:text="수정"></a>
+                <a id="delete" href="javascript:void(0);" th:data-uri="@{|/question/delete/${question.id}|}"
+                   class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+                   th:text="삭제"></a>
+            </div>
+            </div>
         </div>
-    </div>
     <!--답변의 갯수 표시 -->
     <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
     <!--답변 반복 시작 -->
@@ -38,4 +47,15 @@
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
 </div>
+<script type='text/javascript'>
+    const delete_elements = document.getElementById("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            console.log("aaaaaaaaaaaaa");
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+</script>
 </html>
