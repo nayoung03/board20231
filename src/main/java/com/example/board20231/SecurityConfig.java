@@ -30,6 +30,10 @@ public class SecurityConfig {
                 .formLogin((formLogin)->formLogin // 로그인 설정을 담당하는 부분,
                         .loginPage("/user/login") // 로그인페이지의 url
                         .defaultSuccessUrl("/")) //로그인 성공시 루트 url
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                        .logoutSuccessUrl("/") //로그아웃 성공하면 루트 페이지로 이동
+                        .invalidateHttpSession(true))
                 ;
         return http.build();
     }
@@ -39,7 +43,7 @@ public class SecurityConfig {
     }
     // AuthentiactionManager : 스프링 시큐리티의 인증을 담당
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
