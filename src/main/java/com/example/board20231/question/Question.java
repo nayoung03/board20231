@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,5 +34,8 @@ public class Question {
     private SiteUser author;
 
     private LocalDateTime modifyData;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<SiteUser> voter;  // list가 아닌 set ? 추천인은 중복되면 안되기때문에..
 
 }
