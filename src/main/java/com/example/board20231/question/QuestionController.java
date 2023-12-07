@@ -1,6 +1,8 @@
 package com.example.board20231.question;
 
+import com.example.board20231.answer.Answer;
 import com.example.board20231.answer.AnswerForm;
+import com.example.board20231.answer.AnswerService;
 import com.example.board20231.user.SiteUser;
 import com.example.board20231.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final UserService userService;
+    private final AnswerService answerService;
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
@@ -33,12 +36,15 @@ public class QuestionController {
     }
 
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm){
+    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, @RequestParam(value="page",defaultValue = "0") int page){
         Question question = this.questionService.getQuestion(id);
+        Page<Answer> paging = this.answerService.getList(question,page);
+        model.addAttribute("paging",paging);
         model.addAttribute("question", question);
         System.out.println("question.voter.size() = " + question.voter.size());
         return "question_detail";
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {

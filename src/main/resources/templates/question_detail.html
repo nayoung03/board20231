@@ -1,5 +1,6 @@
 <!--<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">-->
 <html layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-secuirty">
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> <!--ajax 를 이용하기위한 제이쿼리 -->
 <div layout:fragment="content" class="container my-3">
     <!--질문-->
     <h2 class="border-bottom py-2" th:text="${question.subject}"></h2>
@@ -30,7 +31,7 @@
             </div>
         </div>
     <!--답변의 갯수 표시 -->
-    <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+    <h5 class="border-bottom my-3 py-2" id="lengthofanswer" th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
     <!--답변 반복 시작 -->
     <div class="card my-3" th:each="answer:${question.answerList}">
         <a th:id="|answer_${answer.id}|"></a>
@@ -67,6 +68,29 @@
         </div>
     </div>
 <!-- 답변 반복 끝-->
+
+    <!--페이징처리 시작-->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'"> <!-- 이전 페이지가 없으면 비활성화 (페이징 기능)  -->
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >=paging.number-3 and page <=paging.number+3}"
+                th:classappend="${page == paging.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'"> <!-- 다음 페이지가 없으면 비활성화 (페이징 기능) -->
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
     <!-- 답변 작성 -->
     <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
@@ -74,6 +98,8 @@
         <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
+
+
 </div>
 <script layout:fragment="script" type='text/javascript'>
     const delete_elements = document.getElementsByClassName("delete");
@@ -94,5 +120,14 @@
             };
         });
     });
+
+    const page_elements=  document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function (element){
+        element.addEventListener('click',function(){
+            document.getElementById('page').value=this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+
 </script>
 </html>
