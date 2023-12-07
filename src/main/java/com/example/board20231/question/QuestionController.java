@@ -1,6 +1,8 @@
 package com.example.board20231.question;
 
+import com.example.board20231.answer.Answer;
 import com.example.board20231.answer.AnswerForm;
+import com.example.board20231.answer.AnswerService;
 import com.example.board20231.user.SiteUser;
 import com.example.board20231.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,22 +25,30 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final UserService userService;
+    private final AnswerService answerService;
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
         Page<Question> paging = this.questionService.getList(page,kw);
         model.addAttribute("paging",paging);
         model.addAttribute("kw",kw);  // 화면에서
+
         return "question_list";
     }
 
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm){
+    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, @RequestParam(value="page",defaultValue = "0") int page){
         Question question = this.questionService.getQuestion(id);
+
+       /*댓글 페이징*/
+        Page<Answer> paging = this.answerService.getList(question,page);
+        model.addAttribute("paging",paging);
+        model.addAttribute("page",page);
         model.addAttribute("question", question);
         System.out.println("question.voter.size() = " + question.voter.size());
         return "question_detail";
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
@@ -46,7 +56,7 @@ public class QuestionController {
             return "question_form";
         }
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        this.questionService.create(questionForm.getSubject(),questionForm.getContent(),siteUser);
+        this.questionService.create(questionForm.getSubject(),questionForm.getContent(),questionForm.getCategory(),siteUser);
         return "redirect:/question/list";
     }
     @PreAuthorize("isAuthenticated()")
@@ -64,8 +74,10 @@ public class QuestionController {
     }
     questionForm.setSubject(question.getSubject());
     questionForm.setContent(question.getContent());
+    questionForm.setContent(String.valueOf(question.getCategory()));
 
-    return "question_form";
+
+        return "question_form";
 }
 
     @PreAuthorize("isAuthenticated()")

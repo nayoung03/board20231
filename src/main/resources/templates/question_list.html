@@ -4,7 +4,7 @@
 <!--<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.css}">-->
     <div class="row my-3">
         <div class="col-6">
-            <a th:href="@{/question/create}" class="btn btn-primary">질문 등록하기</a>
+            <a th:href="@{/question/create}" class="btn btn-primary">새글 등록하기</a>
         </div>
         <div class="col-6">
             <div class="input-group">
@@ -19,6 +19,7 @@
         <th>번호</th>
         <th style="width: 50%">제목</th>
         <th>글쓴이</th>
+        <th>카테고리</th>
         <th>작성일시</th>
     </tr>
     </thead>
@@ -33,6 +34,15 @@
             </span>
         </td>
         <td><span th:if="${question.author !=null}" th:text="${question.author.username}"></span></td>
+        <td>
+
+            <span th:if="${question.category != null && question.category.toString() == 'QUESTION'}" th:text="질문"></span>
+            <span th:if="${question.category != null && question.category.toString() == 'LECTURE'}" th:text="강좌"></span>
+            <span th:if="${question.category != null && question.category.toString() == 'BOARD'}" th:text="자유게시판"></span>
+            <span th:if="${question.category != null && question.category.toString() == 'NOTICE'}" th:text="공지사항"></span>
+            <span th:if="${question.category == null}" th:text="none"></span>
+
+        </td>
         <td th:text="${#temporals.format(question.createDate,'yyyy-MM-dd HH:mm')}"></td>
     </tr>
     </tbody>
@@ -65,6 +75,13 @@
         <input type="hidden" id="page" name="page" th:value="${paging.number}">
     </form>
 </div>
+
+
+
+
+
+
+
 <script layout:fragment="script" type='text/javascript'>
     const page_elements=  document.getElementsByClassName("page-link");
     Array.from(page_elements).forEach(function (element){
@@ -79,5 +96,8 @@
         document.getElementById('page').value=0; // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
         document.getElementById('searchForm').submit();
     });
+
+
+
 </script>
 </html>
