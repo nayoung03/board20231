@@ -38,8 +38,11 @@ public class QuestionController {
     @GetMapping(value = "/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, @RequestParam(value="page",defaultValue = "0") int page){
         Question question = this.questionService.getQuestion(id);
+
+       /*댓글 페이징*/
         Page<Answer> paging = this.answerService.getList(question,page);
         model.addAttribute("paging",paging);
+        model.addAttribute("page",page);
         model.addAttribute("question", question);
         System.out.println("question.voter.size() = " + question.voter.size());
         return "question_detail";

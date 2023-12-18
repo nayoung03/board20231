@@ -66,7 +66,10 @@ public class AnswerService {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("Voter")); //추천순
         sorts.add(Sort.Order.desc("createDate")); //작성일자 순
-        Pageable pageable = PageRequest.of(page, 3, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 3, Sort.by(sorts)); //추천수 기준으로 먼저 내림차순 정렬, 동일한 추천수인 경우 작성일자로 오름차순 정렬
+//        Pageable pageable = PageRequest.of(page,3);
+
+
         return this.answerRepository.findAllByQuestion(question,pageable);
 
     }
