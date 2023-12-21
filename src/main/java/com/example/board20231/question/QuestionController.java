@@ -32,6 +32,7 @@ public class QuestionController {
         Page<Question> paging = this.questionService.getList(page,kw);
         model.addAttribute("paging",paging);
         model.addAttribute("kw",kw);  // 화면에서
+
         return "question_list";
     }
 
@@ -55,7 +56,7 @@ public class QuestionController {
             return "question_form";
         }
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        this.questionService.create(questionForm.getSubject(),questionForm.getContent(),siteUser);
+        this.questionService.create(questionForm.getSubject(),questionForm.getContent(),questionForm.getCategory(),siteUser);
         return "redirect:/question/list";
     }
     @PreAuthorize("isAuthenticated()")
@@ -73,8 +74,10 @@ public class QuestionController {
     }
     questionForm.setSubject(question.getSubject());
     questionForm.setContent(question.getContent());
+    questionForm.setContent(String.valueOf(question.getCategory()));
 
-    return "question_form";
+
+        return "question_form";
 }
 
     @PreAuthorize("isAuthenticated()")

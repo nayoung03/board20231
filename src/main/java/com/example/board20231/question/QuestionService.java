@@ -53,11 +53,12 @@ public class QuestionService {
             throw new DataNotFoundException("question not found");
         }
     }
-    public void create(String subject, String content, SiteUser user){
+    public void create(String subject, String content, Question.Category category, SiteUser user){
         Question q = new Question();
         q.setSubject(subject);
         q.setContent(content);
         q.setCreateDate(LocalDateTime.now());
+        q.setCategory(category);
         q.setAuthor(user);
         this.questionRepository.save(q);
     }

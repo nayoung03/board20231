@@ -35,6 +35,14 @@ public class Question {
 
     private LocalDateTime modifyData;
 
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    public enum Category{
+        QUESTION,LECTURE,BOARD,NOTICE
+    }
+
     @ManyToMany(fetch = FetchType.EAGER)
     Set<SiteUser> voter;  // list가 아닌 set ? 추천인은 중복되면 안되기때문에..
 

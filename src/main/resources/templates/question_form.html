@@ -1,20 +1,65 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<div layout:fragment="content" class="container">
-  <h5 class="my-3 border-bottom pb-2">질문등록</h5>
 
-  <form  th:object="${questionForm}" method="post">
-    <input type="hidden" th:name = "${_csrf.parameterName}" th:value="${_csrf.token}"/>
+<div layout:fragment="content" class="container">
+  <h5 class="my-3 border-bottom pb-2">새글 등록</h5>
+
+  <form th:object="${questionForm}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     <div th:replace="~{form_errors :: formErrorsFragment}"></div>
     <div class="mb-3">
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown">
+          카테고리
+        </button>
+        <ul id="category" class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" id="QEUSTION">질문</a></li>
+          <li><a class="dropdown-item" href="#" id="LECTURE">강좌</a></li>
+          <li><a class="dropdown-item" href="#" id="BOARD">자유게시판</a></li>
+          <li><a class="dropdown-item" href="#" id="NOTICE">공지사항</a></li>
+        </ul>
+      </div>
+    </div>
+    <!--선택된 항목을 저장할 hidden input-->
+    <input type="hidden" id="selectedCategory" name="selectedCategory" value="">
+
+
+    <div class="mb-3">
       <label for="subject" class="form-label">제목</label>
-      <input type="text"  th:field="*{subject}" class="form-control">
+      <input type="text" th:field="*{subject}" class="form-control">
     </div>
     <div class="mb-3">
       <label for="content" class="form-label">내용</label>
       <textarea type="text" th:field="*{content}" class="form-control" rows="10"></textarea>
     </div>
+
     <input type="submit" value="저장하기" class="btn btn-primary my-2">
   </form>
 </div>
+
+<script layout:fragment="script" type='text/javascript'>
+
+    const dropdownButton = document.getElementById('dropdownMenuButton1');
+    const dropdownMenu = document.getElementById('category');
+    const selectedCategoryInput = document.getElementById('selectedCategory');
+
+
+    dropdownMenu.addEventListener('click', function (e) {
+
+      if (e.target.classList.contains('dropdown-item')) {
+        // 클릭된 항목의 텍스트를 가져와서 dropdown 버튼의 내용으로 설정합니다.
+        dropdownButton.innerText = e.target.innerText;
+
+        selectedCategoryInput.value = e.target.id.toUpperCase();
+
+      }
+  });
+
+
+
+
+</script>
+
+
 </html>
